@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,6 +49,20 @@ class AuthServiceTest {
         // Assert
         verify(passwordEncoder).encode("password123");
 
+    }
+    @Test
+    void shouldSaveUser_whenRegistrationIsValid() {
+        // Arrange
+        when(userRepository.findByEmail("tadi@example.com"))
+                .thenReturn(Optional.empty());
+        when(passwordEncoder.encode("password123"))
+                .thenReturn("hashedpassword123");
+
+        // Act
+        authService.register("tadiwanashe", "tadi@example.com", "password123");
+
+        // Assert
+        verify(userRepository).save(any(User.class));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.tadiwanashe.authservice.service;
 
+import com.tadiwanashe.authservice.entity.User;
 import com.tadiwanashe.authservice.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,6 +18,14 @@ public class AuthService {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new RuntimeException("Email already exists");
         }
+
         String hashedPassword = passwordEncoder.encode(password);
+
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(hashedPassword);
+
+        userRepository.save(user);
     }
 }
