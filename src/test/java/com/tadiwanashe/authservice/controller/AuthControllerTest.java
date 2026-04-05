@@ -53,7 +53,7 @@ class AuthControllerTest {
             """;
 
         when(authService.login("tadi@example.com", "password123"))
-                .thenReturn("mocked.jwt.token");
+                .thenReturn(new String[]{"mocked.jwt.token", "mocked.refresh.token"});
 
         // Act & Assert
         mockMvc.perform(post("/api/auth/login")

@@ -1,5 +1,6 @@
 package com.tadiwanashe.authservice.service;
 
+import com.tadiwanashe.authservice.entity.RefreshToken;
 import com.tadiwanashe.authservice.entity.User;
 import com.tadiwanashe.authservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class AuthServiceTest {
     private UserRepository userRepository;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private RefreshTokenService refreshTokenService;
 
     @InjectMocks
     private AuthService authService;
@@ -73,6 +76,11 @@ class AuthServiceTest {
         User user = new User();
         user.setEmail("tadi@example.com");
         user.setPassword("hashedpassword123");
+        RefreshToken mockRefreshToken = new RefreshToken();
+        mockRefreshToken.setToken("mocked.refresh.token");
+
+        when(refreshTokenService.createRefreshToken(user))
+                .thenReturn(mockRefreshToken);
 
         when(userRepository.findByEmail("tadi@example.com"))
                 .thenReturn(Optional.of(user));
@@ -82,10 +90,10 @@ class AuthServiceTest {
                 .thenReturn("mocked.jwt.token");
 
         // Act
-        String token = authService.login("tadi@example.com", "password123");
+        String[] tokens = authService.login("tadi@example.com", "password123");
 
         // Assert
-        assertThat(token).isEqualTo("mocked.jwt.token");
+        assertThat(tokens[0]).isEqualTo("mocked.jwt.token");
     }
     @Test
     void shouldThrowException_whenPasswordIsInvalid() {
