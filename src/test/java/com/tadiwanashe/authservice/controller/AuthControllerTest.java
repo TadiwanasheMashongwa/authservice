@@ -63,4 +63,24 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.token").value("mocked.jwt.token"));
     }
 
+    @Test
+    void shouldReturn200_whenRefreshTokenIsValid() throws Exception {
+        // Arrange
+        String requestBody = """
+            {
+                "refreshToken": "valid.refresh.token"
+            }
+            """;
+
+        when(authService.refreshToken("valid.refresh.token"))
+                .thenReturn("new.access.token");
+
+        // Act & Assert
+        mockMvc.perform(post("/api/auth/refresh")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value("new.access.token"));
+    }
+
 }

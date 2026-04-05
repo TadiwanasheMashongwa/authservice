@@ -23,6 +23,16 @@ public class AuthService {
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
     }
+    public String refreshToken(String token) {
+        RefreshToken refreshToken = refreshTokenService.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+
+        if (refreshTokenService.isExpired(refreshToken)) {
+            throw new RuntimeException("Refresh token expired");
+        }
+
+        return jwtService.generateToken(refreshToken.getUser().getEmail());
+    }
 
     public void register(String username, String email, String password) {
         if (userRepository.findByEmail(email).isPresent()) {

@@ -1,12 +1,10 @@
 package com.tadiwanashe.authservice.controller;
 
-import com.tadiwanashe.authservice.dto.AuthResponse;
-import com.tadiwanashe.authservice.dto.RegisterRequest;
+import com.tadiwanashe.authservice.dto.*;
 import com.tadiwanashe.authservice.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.tadiwanashe.authservice.dto.LoginRequest;
 import com.tadiwanashe.authservice.dto.AuthResponse;
 
 @RestController
@@ -17,6 +15,11 @@ public class AuthController {
 
     public AuthController(AuthService authService) {
         this.authService = authService;
+    }
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
+        String newAccessToken = authService.refreshToken(request.getRefreshToken());
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, request.getRefreshToken()));
     }
 
     @PostMapping("/register")
