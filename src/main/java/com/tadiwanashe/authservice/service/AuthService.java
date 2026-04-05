@@ -3,7 +3,9 @@ package com.tadiwanashe.authservice.service;
 import com.tadiwanashe.authservice.entity.User;
 import com.tadiwanashe.authservice.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
 
     private final UserRepository userRepository;
