@@ -87,5 +87,21 @@ class AuthServiceTest {
         // Assert
         assertThat(token).isEqualTo("mocked.jwt.token");
     }
+    @Test
+    void shouldThrowException_whenPasswordIsInvalid() {
+        // Arrange
+        User user = new User();
+        user.setEmail("tadi@example.com");
+        user.setPassword("hashedpassword123");
+
+        when(userRepository.findByEmail("tadi@example.com"))
+                .thenReturn(Optional.of(user));
+        when(passwordEncoder.matches("wrongpassword", "hashedpassword123"))
+                .thenReturn(false);
+
+        // Act & Assert
+        assertThrows(RuntimeException.class, () ->
+                authService.login("tadi@example.com", "wrongpassword"));
+    }
 
 }
