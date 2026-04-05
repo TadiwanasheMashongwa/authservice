@@ -17,6 +17,10 @@ public class RefreshToken {
     @Column(nullable = false)
     private Instant expiryDate;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
     public RefreshToken() {}
 
     public Long getId() {
@@ -41,5 +45,13 @@ public class RefreshToken {
 
     public void setExpiryDate(Instant expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
