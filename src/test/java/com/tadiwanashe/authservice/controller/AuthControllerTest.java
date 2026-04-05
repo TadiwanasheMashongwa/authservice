@@ -82,5 +82,20 @@ class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").value("new.access.token"));
     }
+    @Test
+    void shouldReturn200_whenLogoutIsSuccessful() throws Exception {
+        // Arrange
+        String requestBody = """
+            {
+                "refreshToken": "valid.refresh.token"
+            }
+            """;
+
+        // Act & Assert
+        mockMvc.perform(post("/api/auth/logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk());
+    }
 
 }

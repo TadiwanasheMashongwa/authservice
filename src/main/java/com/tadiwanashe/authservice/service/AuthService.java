@@ -56,4 +56,9 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
         return new String[]{accessToken, refreshToken.getToken()};
     }
+    public void logout(String token) {
+        refreshTokenService.findByToken(token)
+                .ifPresent(refreshToken ->
+                        refreshTokenService.deleteByUser(refreshToken.getUser()));
+    }
 }

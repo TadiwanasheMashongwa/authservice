@@ -32,4 +32,9 @@ public class AuthController {
         String[] token = authService.login(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(new AuthResponse(token[0], token[1]));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody RefreshRequest request) {
+        authService.logout(request.getRefreshToken());
+        return ResponseEntity.ok().build();
+    }
 }
