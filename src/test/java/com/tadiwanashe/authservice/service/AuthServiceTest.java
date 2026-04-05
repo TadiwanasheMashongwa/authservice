@@ -7,9 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -18,6 +20,8 @@ class AuthServiceTest {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private AuthService authService;
@@ -31,6 +35,19 @@ class AuthServiceTest {
         // Act & Assert
         assertThrows(RuntimeException.class, () ->
                 authService.register("tadiwanashe", "tadi@example.com", "password123"));
+    }
+    @Test
+    void shouldHashPassword_whenRegisteringNewUser() {
+        // Arrange
+        when(userRepository.findByEmail("tadi@example.com"))
+                .thenReturn(Optional.empty());
+        when(passwordEncoder.encode("password123"))
+                .thenReturn("hashedpassword123");
+        // Act
+        authService.register("tadiwanashe", "tadi@example.com", "password123");
+        // Assert
+        verify(passwordEncoder).encode("password123");
+
     }
 
 }
