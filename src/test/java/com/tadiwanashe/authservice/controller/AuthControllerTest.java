@@ -2,6 +2,7 @@ package com.tadiwanashe.authservice.controller;
 
 import com.tadiwanashe.authservice.config.SecurityConfig;
 import com.tadiwanashe.authservice.service.AuthService;
+import com.tadiwanashe.authservice.service.JwtService;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.context.annotation.Import;
@@ -22,6 +23,8 @@ class AuthControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private AuthService authService;
