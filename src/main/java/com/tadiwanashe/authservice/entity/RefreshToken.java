@@ -1,6 +1,7 @@
 package com.tadiwanashe.authservice.entity;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "refresh_tokens")
@@ -10,6 +11,12 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String token;
+
+    @Column(nullable = false)
+    private Instant expiryDate;
+
     public RefreshToken() {}
 
     public Long getId() {
@@ -18,5 +25,21 @@ public class RefreshToken {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Instant getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(Instant expiryDate) {
+        this.expiryDate = expiryDate;
     }
 }
