@@ -5,6 +5,9 @@ import com.tadiwanashe.authservice.service.AuthService;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.context.annotation.Import;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +41,26 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated());
+    }
+    @Test
+    void shouldReturn200_whenLoginIsSuccessful() throws Exception {
+        // Arrange
+        String requestBody = """
+            {
+                "email": "tadi@example.com",
+                "password": "password123"
+            }
+            """;
+
+        when(authService.login("tadi@example.com", "password123"))
+                .thenReturn("mocked.jwt.token");
+
+        // Act & Assert
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value("mocked.jwt.token"));
     }
 
 }
