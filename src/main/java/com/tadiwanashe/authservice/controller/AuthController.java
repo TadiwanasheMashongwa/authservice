@@ -12,6 +12,15 @@ import com.tadiwanashe.authservice.dto.AuthResponse;
 public class AuthController {
 
     private final AuthService authService;
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleUnauthorized(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handleConflict(IllegalStateException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
 
     public AuthController(AuthService authService) {
         this.authService = authService;
