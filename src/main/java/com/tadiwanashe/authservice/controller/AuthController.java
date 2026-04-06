@@ -16,6 +16,12 @@ public class AuthController {
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
     @PostMapping("/refresh")
     public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request) {
         String newAccessToken = authService.refreshToken(request.getRefreshToken());
@@ -27,11 +33,13 @@ public class AuthController {
         authService.register(request.getUsername(), request.getEmail(), request.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         String[] token = authService.login(request.getEmail(), request.getPassword());
         return ResponseEntity.ok(new AuthResponse(token[0], token[1]));
     }
+
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody RefreshRequest request) {
         authService.logout(request.getRefreshToken());
