@@ -5,6 +5,7 @@ import com.tadiwanashe.authservice.entity.User;
 import com.tadiwanashe.authservice.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -21,8 +22,10 @@ public class RefreshTokenService {
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
     }
-
+    @Transactional
     public RefreshToken createRefreshToken(User user) {
+        // Delete existing refresh token for this user if it exists
+        refreshTokenRepository.deleteByUser(user);
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
