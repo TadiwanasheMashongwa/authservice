@@ -35,7 +35,8 @@ public class AuthService {
     }
 
     public void register(String username, String email, String password) {
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmail(email).isPresent())
+        {
             throw new RuntimeException("Email already exists");
         }
         String hashedPassword = passwordEncoder.encode(password);

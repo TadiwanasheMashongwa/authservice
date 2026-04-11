@@ -9,6 +9,7 @@ public class RegisterRequest {
     public RegisterRequest() {
     }
 
+
     public String getUsername() {
         return username;
     }
